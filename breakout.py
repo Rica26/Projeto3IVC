@@ -187,14 +187,11 @@ class Game(tk.Frame):
                 bbox = cv2.selectROI("Select Object to Track", frame_copy, fromCenter=False, showCrosshair=True)
                 self.tracker.init(frame_copy, bbox)
                 self.tracking = True
+                cv2.destroyWindow("Select Object to Track")
             success, bbox = self.tracker.update(frame_copy)
             if success:
                 paddle_x = bbox[0] + bbox[2] / 2
-
-                # Verificar se o paddle não ultrapassa os limites da tela
-                paddle_width = self.paddle.width
-                if paddle_x - paddle_width / 2 >= 0 and paddle_x + paddle_width / 2 <= self.width:
-                    self.paddle.move(paddle_x - self.paddle.get_position()[0], 0)
+                self.paddle.move(paddle_x - self.paddle.get_position()[0], 0)
 
             # Adicione este bloco para desenhar a elipse na região rastreada
             bbox = tuple(map(int, bbox))
